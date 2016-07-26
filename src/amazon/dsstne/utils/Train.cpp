@@ -42,6 +42,9 @@ void printUsageTrain() {
     cout << "    -b batch_size: (default = 1024) the number records/input rows to process in a batch." << endl;
     cout << "    -e num_epochs: (default = 40) the number passes on the full dataset." << endl;
     cout << "    -p checkpoint: (default = 10) the number of epochs after the network is saved." << endl;
+    cout << "    -alpha learningrate: (default = 0.025) the learningrate for SGD." << endl;
+    cout << "    -lambda regularization: (default = 0.0001) the regularization parameter." << endl;
+    cout << "    -mu momentum (default: 0.5) the momentum update parameter." << endl;
     cout << endl;
 }
 
