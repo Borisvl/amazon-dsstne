@@ -41,6 +41,7 @@ void printUsageTrain() {
     cout << "    -n network_file: (required) the output trained neural network in NetCDF file." << endl;
     cout << "    -b batch_size: (default = 1024) the number records/input rows to process in a batch." << endl;
     cout << "    -e num_epochs: (default = 40) the number passes on the full dataset." << endl;
+    cout << "    -p checkpoint: (default = 10) the number of epochs after the network is saved." << endl;
     cout << endl;
 }
 
@@ -62,6 +63,7 @@ int main(int argc, char** argv)
     float alpha = stof(getOptionalArgValue(argc, argv, "-alpha", "0.025f"));
     float lambda = stof(getOptionalArgValue(argc, argv, "-lambda", "0.0001f"));
     float mu = stof(getOptionalArgValue(argc, argv, "-mu", "0.5f"));
+    unsigned int checkpoint_intervall = stoi(getOptionalArgValue(argc, argv, "-p", "10"));
 
 
    if (isArgSet(argc, argv, "-h")) {
@@ -128,7 +130,7 @@ int main(int argc, char** argv)
     // Load training data
     pNetwork->LoadDataSets(vDataSetInput);
     pNetwork->LoadDataSets(vDataSetOutput);
-    pNetwork->SetCheckpoint(networkFileName, 10);
+    pNetwork->SetCheckpoint(networkFileName, checkpoint_intervall);
 
     // Save initialized network before train
     pNetwork->SetPosition(0);
