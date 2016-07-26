@@ -1482,9 +1482,13 @@ NNFloat NNNetwork::Train(uint32_t epochs, NNFloat alpha, NNFloat lambda, NNFloat
                 minibatch                                   = _examples - pos;
             total_error_training                           += error_training;
             total_error_regularization                     += error_regularization * minibatch;                                
-            if (getGpu()._id == 0)
-                printf("NNNetwork::Train: Minibatch@%u, average error %f, (%f training, %f regularization), alpha %f\n", pos, error_training / minibatch + error_regularization, error_training / minibatch, error_regularization, alpha);
-
+            if (getGpu()._id == 0) {
+                timeval t1;
+                gettimeofday(&t1, NULL);
+                uint32_t elapsed = elapsed_time(t1, t0);
+                printf("Epoch %u, Samples %u / %u, avg. error: %f (batch avg. error %f, batch reg. error %f) Elapsed time %us, Remaining time %us\r", epoch, pos, GetExamples(), (total_error_training + error_regularization) / pos, error_training / minibatch, error_regularization, elapsed, GetExamples() * elapsed / pos);
+                //printf("NNNetwork::Train: Minibatch@%u, average error %f, (%f training, %f regularization), alpha %f\n", pos, error_training / minibatch + error_regularization, error_training / minibatch, error_regularization, alpha);
+            }
             // Adjust step size if network is diverging (you should probably reduce the step size instead but let's
             // assume you're pretty much asleep at the wheel and the network has to fend for itself).
             NNFloat step_alpha                              = alpha;
