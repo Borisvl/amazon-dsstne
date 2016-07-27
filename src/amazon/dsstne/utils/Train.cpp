@@ -35,7 +35,7 @@ using namespace netCDF::exceptions;
 void printUsageTrain() {
     cout << "Train: Trains a neural networks given a config and dataset." << endl;
     cout << "Usage: train -d <dataset_name> -c <config_file> -n <network_file> -i <input_netcdf> -o <output_netcdf> [-b <batch_size>] [-e <num_epochs>]" << endl;
-    cout << "    -c config_file: (required) the JSON config files with network training parameters." << endl;
+    cout << "    -c config_file: (required) the JSON config files with network training parameters OR nc file of network that should be further trained." << endl;
     cout << "    -i input_netcdf: (required) path to the netcdf with dataset for the input of the network." << endl;
     cout << "    -o output_netcdf: (required) path to the netcdf with dataset for expected output of the network." << endl;
     cout << "    -n network_file: (required) the output trained neural network in NetCDF file." << endl;
@@ -128,7 +128,13 @@ int main(int argc, char** argv)
     vDataSetInput.insert(vDataSetInput.end(), vDataSetOutput.begin(), vDataSetOutput.end());
 
     // Create a Neural network from the config
-    NNNetwork* pNetwork = LoadNeuralNetworkJSON(configFileName, batchSize, vDataSetInput);
+    NNNetwork* pNetwork;
+    if (configFileName.size() >= 3 && configFileName.compare(configFileName.size() - 3, 3, ".nc") == 0) {
+        pNetwork = LoadNeuralNetworkNetCDF(configFileName, batchSize);
+    } else {
+       pNetwork = LoadNeuralNetworkJSON(configFileName, batchSize, vDataSetInput);
+    }
+    //NNNetwork* pNetwork = LoadNeuralNetworkJSON(configFileName, batchSize, vDataSetInput);
     
     // Load training data
     pNetwork->LoadDataSets(vDataSetInput);
