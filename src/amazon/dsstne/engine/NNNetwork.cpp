@@ -1485,8 +1485,8 @@ NNFloat NNNetwork::Train(uint32_t epochs, NNFloat alpha, NNFloat lambda, NNFloat
             if (getGpu()._id == 0) {
                 timeval t1;
                 gettimeofday(&t1, NULL);
-                uint32_t elapsed = elapsed_time(t1, t0);
-                printf("\r\033[0KEpoch %u, Samples %u / %u, avg. error: %f (batch avg. error %f, batch reg. error %f) Elapsed time %us / %us", epoch, pos, GetExamples(), (total_error_training + total_error_regularization) / (pos + minibatch), error_training / minibatch, error_regularization, elapsed, GetExamples() * elapsed / (pos + minibatch));
+                uint64_t elapsed = elapsed_time(t1, t0);
+                printf("\r\033[0KEpoch %u, Samples %u / %u, avg. error: %f (batch avg. error %f, batch reg. error %f) Elapsed time %us / %us", epoch, pos, GetExamples(), (total_error_training + total_error_regularization) / (pos + minibatch), error_training / minibatch, error_regularization, static_cast<uint32_t>(elapsed), static_cast<uint32_t>(GetExamples() * elapsed / (pos + minibatch)));
                 fflush(stdout);
                 //printf("NNNetwork::Train: Minibatch@%u, average error %f, (%f training, %f regularization), alpha %f\n", pos, error_training / minibatch + error_regularization, error_training / minibatch, error_regularization, alpha);
             }
